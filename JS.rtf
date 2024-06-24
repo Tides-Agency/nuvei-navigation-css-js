@@ -1,450 +1,274 @@
-{\rtf1\ansi\ansicpg1252\cocoartf2758
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fmodern\fcharset0 Courier;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
-\deftab720
-\pard\pardeftab720\partightenfactor0
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
-\f0\fs26 \cf0 \expnd0\expndtw0\kerning0
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>\
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>\
-<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>\
-\
-document.addEventListener("DOMContentLoaded", function () \{\
-  gsap.registerPlugin(ScrollTrigger);\
-\
-  const desktopSvgs = document.querySelectorAll(".animated-svg");\
-  if (desktopSvgs.length > 0) \{\
-    const desktopInitialColors = \{\
-      "stop-1": "#ff0000",\
-      "stop-2": "#C500C8",\
-      "stop-3": "#2652eb",\
-      "stop-4": "#51D3FD",\
-    \};\
-\
-    const desktopColors = ["#2652EB", "#9b3AE0", "#E40046", "#E40046"];\
-\
-    desktopSvgs.forEach((svg) => \{\
-      let animationStarted = false;\
-      let animationEnded = false;\
-\
-      const paths = svg.querySelectorAll("defs linearGradient stop");\
-\
-      const tl = gsap.timeline(\{\
-        scrollTrigger: \{\
-          trigger: svg,\
-          start: "top center",\
-          end: "bottom center",\
-          scrub: true,\
-          onUpdate: () => \{\
-            // Check if animation has started or ended\
-            if (!animationStarted && tl.time() > 0) \{\
-              animationStarted = true;\
-            \}\
-            if (!animationEnded && tl.time() === tl.duration()) \{\
-              animationEnded = true;\
-            \}\
-          \},\
-        \},\
-      \});\
-\
-      paths.forEach((stop) => \{\
-        const stop1 = stop\
-          .closest("linearGradient")\
-          .querySelectorAll(".stop-1");\
-        const stop2 = stop\
-          .closest("linearGradient")\
-          .querySelectorAll(".stop-2");\
-        const stop3 = stop\
-          .closest("linearGradient")\
-          .querySelectorAll(".stop-3");\
-        const stop4 = stop\
-          .closest("linearGradient")\
-          .querySelectorAll(".stop-4");\
-\
-        tl.to(stop1, \{ attr: \{ "stop-color": desktopColors[0] \} \}, 0)\
-          .to(stop2, \{ attr: \{ "stop-color": desktopColors[1] \} \}, 0)\
-          .to(stop3, \{ attr: \{ "stop-color": desktopColors[2] \} \}, 0)\
-          .to(stop4, \{ attr: \{ "stop-color": desktopColors[3] \} \}, 0);\
-      \});\
-    \});\
-  \}\
-\});\
-\
-// Fetch navbar parts asynchronously\
-async function fetchAndInsertNavbar(navbarId, insertId) \{\
-  try \{\
-    const response = await fetch("https://www.nuvei.com/archive/navbar");\
-    const data = await response.text();\
-    const tempDiv = document.createElement("div");\
-    tempDiv.innerHTML = data;\
-\
-    // Extract the navbar part\
-    const navbarPart = tempDiv.querySelector(navbarId);\
-    if (navbarPart) \{\
-      // Insert the navbar part into the corresponding insert element\
-      const navbarMenu = document.getElementById(insertId);\
-      if (navbarMenu) \{\
-        navbarMenu.appendChild(navbarPart);\
-\
-        // Set up event listeners for Lottie animations after inserting the navbar part\
-        setupLottieEventListeners();\
-      \} else \{\
-        console.error("Insert element not found for", insertId);\
-      \}\
-    \} else \{\
-      console.error("Navbar part not found in fetched data.");\
-    \}\
-  \} catch (error) \{\
-    console.error("Error fetching navbar:", error);\
-  \}\
-\}\
-\
-// Call all fetchAndInsertNavbar functions concurrently\
-Promise.all([\
-  fetchAndInsertNavbar("#solutions-nav-1", "solutions-nav-insert-1"),\
-  fetchAndInsertNavbar("#solutions-nav-2", "solutions-nav-insert-2"),\
-  fetchAndInsertNavbar("#solutions-nav-3", "solutions-nav-insert-3"),\
-  fetchAndInsertNavbar("#use-cases-nav-1", "use-cases-nav-insert-1"),\
-  fetchAndInsertNavbar("#use-cases-nav-2", "use-cases-nav-insert-2"),\
-  fetchAndInsertNavbar("#use-cases-nav-3", "use-cases-nav-insert-3"),\
-  fetchAndInsertNavbar("#about-us-nav-1", "about-us-nav-insert-1"),\
-  fetchAndInsertNavbar("#about-us-nav-2", "about-us-nav-insert-2"),\
-  fetchAndInsertNavbar("#support-nav-1", "support-nav-insert-1"),\
-  fetchAndInsertNavbar("#support-nav-2", "support-nav-insert-2"),\
-]);\
-\
-// Lottie icons\
-function setupLottieEventListeners() \{\
-  // Check if viewport width is greater than or equal to 992px\
-  if (window.innerWidth >= 992) \{\
-    const parentLinks = document.getElementsByClassName(\
-      "navbar_dropdown-content_dropdown-lottie-link"\
-    );\
-    const parentLinksArray = Array.from(parentLinks);\
-\
-    parentLinksArray.forEach((parentLink) => \{\
-      const lottiePlayer = parentLink.querySelector(".nav-animated-icon");\
-\
-      parentLink.addEventListener("mouseenter", () => \{\
-        lottiePlayer.play();\
-      \});\
-\
-      parentLink.addEventListener("mouseleave", () => \{\
-        lottiePlayer.stop();\
-      \});\
-    \});\
-  \}\
-\}\
-\
-// Call the function when the document is ready\
-document.addEventListener("DOMContentLoaded", setupLottieEventListeners);\
-\
-//Navigation\
-const navigation = document.querySelector(".navbar_component");\
-const navWrappper = document.querySelector(".nav_wrapper");\
-const navLinks = document.querySelectorAll(".nav_link");\
-const navContent = document.querySelectorAll(".nav_link-content-wrap");\
-const navContentWrap = document.querySelector(".nav_link-content-outer-wrap");\
-const navContentInnerWrap = document.querySelector(\
-  ".nav_link-content-inner-wrap"\
-);\
-const navRightMenu = document.querySelector(".navbar_menu-right");\
-const navMenuBtn = document.querySelector(".navbar_menu-button.w-nav-button");\
-//Nav mobile dropdown\
-const mobileDdLinks = document.querySelectorAll(".nav_mob-link");\
-\
-//Add active class and aria-expanded true to the link\
-function activeLink(link) \{\
-  link.classList.add("is-active");\
-  link.setAttribute("aria-expanded", "true");\
-\}\
-//Remove active class and aria-expanded true from the link\
-function removeActiveLink(link) \{\
-  link.classList.remove("is-active");\
-  link.setAttribute("aria-expanded", "false");\
-\}\
-\
-// Reveal dropdown with optional focus\
-function revealDropdown(currentContent, shouldFocus) \{\
-  gsap.to([navContentWrap, navContentInnerWrap], \{\
-    autoAlpha: 1,\
-    duration: 0.1,\
-  \});\
-  gsap.to(".nav-blur-main", \{\
-    autoAlpha: 1,\
-  \});\
-  gsap.set(navContent, \{\
-    autoAlpha: 0,\
-  \});\
-  gsap.to(".nav_pad", \{\
-    height: currentContent.offsetHeight,\
-    duration: 0.1,\
-  \});\
-  gsap.to(currentContent, \{\
-    autoAlpha: 1,\
-    onComplete: function () \{\
-      if (shouldFocus) \{\
-        const firstLink = currentContent.querySelector(\
-          ".navbar_dropdown-content_dropdown-link, .navbar_dropdown-content_dropdown-lottie-link"\
-        );\
-        if (firstLink) \{\
-          firstLink.focus();\
-        \}\
-      \}\
-    \},\
-  \});\
-\}\
-\
-// Switch dropdown content between hovered links\
-let switchDropdownTimer; // Define a timer for switchDropdown function\
-function switchDropdown(currentContent, prevContent) \{\
-  clearTimeout(switchDropdownTimer); // Clear any previous timer\
-  switchDropdownTimer = setTimeout(() => \{\
-    gsap.to(navContentWrap, \{\
-      opacity: 1,\
-      duration: 0,\
-    \});\
-    gsap.to(".nav-blur-main", \{\
-      autoAlpha: 1,\
-    \});\
-    gsap.to(prevContent, \{\
-      autoAlpha: 0,\
-      duration: 0,\
-    \});\
-    gsap.to(".nav_pad", \{\
-      height: currentContent.offsetHeight,\
-      duration: 0.1,\
-    \});\
-    gsap.to(currentContent, \{\
-      autoAlpha: 1,\
-      duration: 0.1,\
-    \});\
-  \}, 50);\
-\}\
-\
-// Initial state for nav elements\
-function initialState() \{\
-  if (window.getComputedStyle(navMenuBtn, null).display == "none") \{\
-    gsap.set(navContentWrap, \{\
-      opacity: 0,\
-    \});\
-    gsap.set(navContent, \{\
-      autoAlpha: 0,\
-      opacity: 0,\
-    \});\
-  \}\
-  gsap.to(".nav-blur-main", \{\
-    autoAlpha: 0,\
-  \});\
-  gsap.to(".nav_pad", \{\
-    height: 0,\
-    duration: 0.2,\
-  \});\
-\}\
-\
-// Set initial states\
-initialState();\
-\
-let timer;\
-let isHovering = false;\
-\
-window.addEventListener("DOMContentLoaded", () => \{\
-  if (window.getComputedStyle(navMenuBtn, null).display == "none") \{\
-    navLinks.forEach((link, i) => \{\
-      // Mouseenter event\
-      link.addEventListener("mouseenter", function () \{\
-        isHovering = true;\
-        clearTimeout(timer);\
-        let previousLinks = [...navLinks].map((item) => \{\
-          return item.classList.contains("is-active");\
-        \});\
-        let checkPrev = previousLinks.filter((item) => !!item);\
-        let prevIndex = previousLinks.indexOf(true);\
-        if (checkPrev.length === 0) \{\
-          gsap.killTweensOf([\
-            navContent,\
-            navContent[i],\
-            ".nav-blur-main",\
-            ".nav_pad",\
-          ]);\
-          revealDropdown(navContent[i], false);\
-        \}\
-        if (checkPrev.length > 0) \{\
-          gsap.killTweensOf([navContent, ".nav-blur-main", ".nav_pad"]);\
-          switchDropdown(navContent[i], navContent[prevIndex]);\
-          removeActiveLink(navLinks[prevIndex]);\
-        \}\
-      \});\
-\
-      // Accessibility\
-      link.addEventListener("keydown", function (e) \{\
-        const firstDdItem = navContent[i].querySelector("a");\
-        const ddItems = navContent[i].querySelectorAll("a");\
-        const lastDdItem = ddItems[ddItems.length - 1];\
-\
-        // On press Enter key\
-        if (e.key === "Enter") \{\
-          revealDropdown(navContent[i], true);\
-        \}\
-        // On press Tab key\
-        if (e.key === "Tab") \{\
-          setTimeout(function () \{\
-            firstDdItem.focus();\
-          \}, 50);\
-\
-          // Add listener to the last item in dropdown\
-          lastDdItem.addEventListener("keydown", function (event) \{\
-            if (event.key === "Tab") \{\
-              setTimeout(function () \{\
-                initialState();\
-                link.nextElementSibling.focus();\
-              \}, 50);\
-            \}\
-          \});\
-        \}\
-\
-        if (e.key === "ArrowDown") \{\
-          e.preventDefault();\
-          link.nextElementSibling.focus();\
-        \}\
-      \});\
-    \});\
-\
-    navigation.addEventListener("mouseout", function (event) \{\
-      // Check if the mouse has moved to an element outside the nav\
-      if (!navigation.contains(event.relatedTarget)) \{\
-        isHovering = false;\
-        initialState();\
-\
-        timer = setTimeout(() => \{\
-          if (!isHovering) \{\
-            initialState();\
-          \}\
-        \}, 100);\
-      \}\
-    \});\
-\
-    navRightMenu.addEventListener("mouseenter", function (event) \{\
-      isHovering = false;\
-      initialState();\
-\
-      timer = setTimeout(() => \{\
-        if (!isHovering) \{\
-          initialState();\
-        \}\
-      \}, 100);\
-    \});\
-\
-    //Close dropdown on press Escape\
-    document.addEventListener("keydown", function (e) \{\
-      if (e.key === "Escape") \{\
-        navLinks.forEach((link) => link.blur());\
-        initialState();\
-        navLinks[0].focus();\
-      \}\
-    \});\
-  \} else \{\
-    mobileDdLinks.forEach((link) => \{\
-      const ddMenu = link.parentElement.querySelector(\
-        ".navbar_dropdown-content"\
-      );\
-      const content = ddMenu.querySelector(".navbar_dropdown-content-inner");\
-\
-      let dropdownTl = gsap.timeline(\{ reversed: true, paused: true \});\
-\
-      dropdownTl.to(content, \{\
-        height: "auto",\
-        willChange: "transform",\
-      \});\
-\
-      link.addEventListener("click", (e) => \{\
-        e.preventDefault();\
-        e.stopPropagation();\
-        dropdownTl.reversed() ? dropdownTl.play() : dropdownTl.reverse();\
-\
-        ddMenu.classList.toggle("is-active");\
-        link.classList.toggle("is-active");\
-      \});\
-    \});\
-  \}\
-\});\
-\
-// Stop body scroll when full menu is open\
-const body = document.body;\
-function letBodyScroll(bool) \{\
-  if (bool) \{\
-    body.style.overflow = "hidden";\
-  \} else \{\
-    body.style.overflow = "auto";\
-  \}\
-\}\
-const targetNode = document.querySelector(".navbar_menu-button");\
-const config = \{ attributes: true, childList: false, subtree: false \};\
-const callback = function (mutationsList, observer) \{\
-  for (let i = 0; i < mutationsList.length; i++) \{\
-    if (mutationsList[i].type === "attributes") \{\
-      const menuIsOpen = mutationsList[i].target.classList.contains("w--open");\
-      letBodyScroll(menuIsOpen);\
-    \}\
-  \}\
-\};\
-const observer = new MutationObserver(callback);\
-observer.observe(targetNode, config);\
-\
-// init Weglot\
-Weglot.initialize(\{\
-  api_key: "wg_d49fb88994c189e367fe4b830396c4703",\
-\});\
-\
-// on Weglot init\
-Weglot.on("initialized", () => \{\
-  // get the current active language\
-  const currentLang = Weglot.getCurrentLang();\
-  // call updateDropdownLinks function\
-  updateSW5DropdownLinks(currentLang);\
-\});\
-\
-// for each of the .wg-element-wrapper language links\
-document.querySelectorAll(".wg-element-wrapper.sw5 [lang]").forEach((link) => \{\
-  // add a click event listener\
-  link.addEventListener("click", function (e) \{\
-    // prevent default\
-    e.preventDefault();\
-    // switch to the current active language\
-    Weglot.switchTo(this.getAttribute("lang"));\
-    // call updateDropdownLinks function\
-    updateSW5DropdownLinks(this.getAttribute("lang"));\
-  \});\
-\});\
-\
-// updateDropdownLinks function\
-function updateSW5DropdownLinks(currentLang) \{\
-  // get the wrapper element\
-  const $wrapper = document.querySelector(".wg-element-wrapper.sw5");\
-  // if the .w-dropdown-toggle is not the current active language\
-  if (\
-    $wrapper.querySelector(".w-dropdown-toggle").getAttribute("lang") !==\
-    currentLang\
-  ) \{\
-    // get the current active language link\
-    const $activeLangLink = $wrapper.querySelector(\
-      "[lang=" + currentLang + "]"\
-    );\
-    // swap the dropdown toggle's text with the current active language link text\
-    const $toggle = $activeLangLink\
-      .closest(".wg-element-wrapper")\
-      .querySelector(".w-dropdown-toggle");\
-    const toggleTxt = $toggle.textContent;\
-    const activeLangLinkTxt = $activeLangLink.textContent;\
-    $toggle.querySelector("div").textContent = activeLangLinkTxt;\
-    $activeLangLink.textContent = toggleTxt;\
-    // swap the dropdown toggle's lang attr with the current active language link lang attr\
-    const lang = $activeLangLink.getAttribute("lang");\
-    const toggleLang = $toggle.getAttribute("lang");\
-    $toggle.setAttribute("lang", lang);\
-    $activeLangLink.setAttribute("lang", toggleLang);\
-  \}\
-\}\
-}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  
+  // Lottie icons
+  function setupLottieEventListeners() {
+    // Check if viewport width is greater than or equal to 992px
+    if (window.innerWidth >= 992) {
+      const parentLinks = document.getElementsByClassName("navbar_dropdown-content_dropdown-lottie-link");
+      const parentLinksArray = Array.from(parentLinks);
+
+      parentLinksArray.forEach((parentLink) => {
+        const lottiePlayer = parentLink.querySelector(".nav-animated-icon");
+
+        parentLink.addEventListener("mouseenter", () => {
+          lottiePlayer.play();
+        });
+
+        parentLink.addEventListener("mouseleave", () => {
+          lottiePlayer.stop();
+        });
+      });
+    }
+  }
+
+  // Call the function when the document is ready
+  setupLottieEventListeners();
+
+  //Navigation
+  const navigation = document.querySelector(".navbar_component");
+  const navWrappper = document.querySelector(".nav_wrapper");
+  const navLinks = document.querySelectorAll(".nav_link");
+  const navContent = document.querySelectorAll(".nav_link-content-wrap");
+  const navContentWrap = document.querySelector(".nav_link-content-outer-wrap");
+  const navContentInnerWrap = document.querySelector(".nav_link-content-inner-wrap");
+  const navRightMenu = document.querySelector(".navbar_menu-right");
+  const navMenuBtn = document.querySelector(".navbar_menu-button.w-nav-button");
+  //Nav mobile dropdown
+  const mobileDdLinks = document.querySelectorAll(".nav_mob-link");
+
+  //Add active class and aria-expanded true to the link
+  function activeLink(link) {
+    link.classList.add("is-active");
+    link.setAttribute("aria-expanded", "true");
+  }
+
+  //Remove active class and aria-expanded true from the link
+  function removeActiveLink(link) {
+    link.classList.remove("is-active");
+    link.setAttribute("aria-expanded", "false");
+  }
+
+  // Reveal dropdown with optional focus
+  function revealDropdown(currentContent, shouldFocus) {
+    gsap.to([navContentWrap, navContentInnerWrap], {
+      autoAlpha: 1,
+      duration: 0.1,
+    });
+    gsap.to(".nav-blur-main", {
+      autoAlpha: 1,
+    });
+    gsap.set(navContent, {
+      autoAlpha: 0,
+    });
+    gsap.to(".nav_pad", {
+      height: currentContent.offsetHeight,
+      duration: 0.1,
+    });
+    gsap.to(currentContent, {
+      autoAlpha: 1,
+      onComplete: function () {
+        if (shouldFocus) {
+          const firstLink = currentContent.querySelector(
+            ".navbar_dropdown-content_dropdown-link, .navbar_dropdown-content_dropdown-lottie-link"
+          );
+          if (firstLink) {
+            firstLink.focus();
+          }
+        }
+      },
+    });
+  }
+
+  // Switch dropdown content between hovered links
+  let switchDropdownTimer; // Define a timer for switchDropdown function
+  function switchDropdown(currentContent, prevContent) {
+    clearTimeout(switchDropdownTimer); // Clear any previous timer
+    switchDropdownTimer = setTimeout(() => {
+      gsap.to(navContentWrap, {
+        opacity: 1,
+        duration: 0,
+      });
+      gsap.to(".nav-blur-main", {
+        autoAlpha: 1,
+      });
+      gsap.to(prevContent, {
+        autoAlpha: 0,
+        duration: 0,
+      });
+      gsap.to(".nav_pad", {
+        height: currentContent.offsetHeight,
+        duration: 0.1,
+      });
+      gsap.to(currentContent, {
+        autoAlpha: 1,
+        duration: 0.1,
+      });
+    }, 50);
+  }
+
+  // Initial state for nav elements
+  function initialState() {
+    if (window.getComputedStyle(navMenuBtn, null).display == "none") {
+      gsap.set(navContentWrap, {
+        opacity: 0,
+      });
+      gsap.set(navContent, {
+        autoAlpha: 0,
+        opacity: 0,
+      });
+    }
+    gsap.to(".nav-blur-main", {
+      autoAlpha: 0,
+    });
+    gsap.to(".nav_pad", {
+      height: 0,
+      duration: 0.2,
+    });
+  }
+
+  // Set initial states
+  initialState();
+
+  let timer;
+  let isHovering = false;
+
+  if (window.getComputedStyle(navMenuBtn, null).display == "none") {
+    navLinks.forEach((link, i) => {
+      // Mouseenter event
+      link.addEventListener("mouseenter", function () {
+        isHovering = true;
+        clearTimeout(timer);
+        let previousLinks = [...navLinks].map((item) => {
+          return item.classList.contains("is-active");
+        });
+        let checkPrev = previousLinks.filter((item) => !!item);
+        let prevIndex = previousLinks.indexOf(true);
+        if (checkPrev.length === 0) {
+          gsap.killTweensOf([navContent, navContent[i], ".nav-blur-main", ".nav_pad"]);
+          revealDropdown(navContent[i], false);
+        }
+        if (checkPrev.length > 0) {
+          gsap.killTweensOf([navContent, ".nav-blur-main", ".nav_pad"]);
+          switchDropdown(navContent[i], navContent[prevIndex]);
+          removeActiveLink(navLinks[prevIndex]);
+        }
+      });
+
+      // Accessibility
+      link.addEventListener("keydown", function (e) {
+        const firstDdItem = navContent[i].querySelector("a");
+        const ddItems = navContent[i].querySelectorAll("a");
+        const lastDdItem = ddItems[ddItems.length - 1];
+
+        // On press Enter key
+        if (e.key === "Enter") {
+          revealDropdown(navContent[i], true);
+        }
+        // On press Tab key
+        if (e.key === "Tab") {
+          setTimeout(function () {
+            firstDdItem.focus();
+          }, 50);
+
+          // Add listener to the last item in dropdown
+          lastDdItem.addEventListener("keydown", function (event) {
+            if (event.key === "Tab") {
+              setTimeout(function () {
+                initialState();
+                link.nextElementSibling.focus();
+              }, 50);
+            }
+          });
+        }
+
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          link.nextElementSibling.focus();
+        }
+      });
+    });
+
+    navigation.addEventListener("mouseout", function (event) {
+      // Check if the mouse has moved to an element outside the nav
+      if (!navigation.contains(event.relatedTarget)) {
+        isHovering = false;
+        initialState();
+
+        timer = setTimeout(() => {
+          if (!isHovering) {
+            initialState();
+          }
+        }, 100);
+      }
+    });
+
+    navRightMenu.addEventListener("mouseenter", function (event) {
+      isHovering = false;
+      initialState();
+
+      timer = setTimeout(() => {
+        if (!isHovering) {
+          initialState();
+        }
+      }, 100);
+    });
+
+    //Close dropdown on press Escape
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        navLinks.forEach((link) => link.blur());
+        initialState();
+        navLinks[0].focus();
+      }
+    });
+  } else {
+    mobileDdLinks.forEach((link) => {
+      const ddMenu = link.parentElement.querySelector(".navbar_dropdown-content");
+      const content = ddMenu.querySelector(".navbar_dropdown-content-inner");
+
+      let dropdownTl = gsap.timeline({ reversed: true, paused: true });
+
+      dropdownTl.to(content, {
+        height: "auto",
+        willChange: "transform",
+      });
+
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropdownTl.reversed() ? dropdownTl.play() : dropdownTl.reverse();
+
+        ddMenu.classList.toggle("is-active");
+        link.classList.toggle("is-active");
+      });
+    });
+  }
+
+  // Stop body scroll when full menu is open
+  const body = document.body;
+  function letBodyScroll(bool) {
+    if (bool) {
+      body.style.overflow = "hidden";
+    } else {
+      body.style.overflow = "auto";
+    }
+  }
+  const targetNode = document.querySelector(".navbar_menu-button");
+  const config = { attributes: true, childList: false, subtree: false };
+  const callback = function (mutationsList, observer) {
+    for (let i = 0; i < mutationsList.length; i++) {
+      if (mutationsList[i].type === "attributes") {
+        const menuIsOpen = mutationsList[i].target.classList.contains("w--open");
+        letBodyScroll(menuIsOpen);
+      }
+    }
+  };
+  const observer = new MutationObserver(callback);
+  observer.observe(targetNode, config);
+
+});
+</script>
